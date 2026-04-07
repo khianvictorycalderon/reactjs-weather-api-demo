@@ -18,6 +18,8 @@ export default function App() {
 
       if (!response.ok) throw new Error('City not found');
 
+      if (response.statu === 429) throw new Error("Too many requests. Try again later");
+
       const data = await response.json();
       setWeather(data);
     } catch (err) {
