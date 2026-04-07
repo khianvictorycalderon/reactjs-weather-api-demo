@@ -1,56 +1,60 @@
-import { useState } from 'react'
+// App.js
+import { useState } from 'react';
+import './index.css';
 
 export default function App() {
-
   const [city, setCity] = useState('');
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState('');
 
   const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
-  const getWeather = async() => {
+  const getWeather = async () => {
+    if (!city) return;
     try {
-      setError("");
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+      setError('');
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+      );
 
-      if (!response.ok) {
-        throw new Error("City not Found");
-      }
+      if (!response.ok) throw new Error('City not found');
 
       const data = await response.json();
       setWeather(data);
-
     } catch (err) {
-
       setError(err.message);
-      setWeather(null)
-        
+      setWeather(null);
     }
-  }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') getWeather();
+  };
 
   return (
-    <div>
-
+    <div className="app">
       <h1>Weather App</h1>
 
-      <input 
-        type="text"
-        placeholder="Enter a City..."
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
-      <button onClick={getWeather}>Get Weather</button>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Enter a city..."
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          onKeyDown={handleKeyPress}
+        />
+        <button onClick={getWeather}>Get Weather</button>
+      </div>
 
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
       {weather && (
-        <div>
+        <div className="weather-card">
           <h2>{weather.name}</h2>
-          <p>{weather.main.temp} Celsius</p>
-          <p>Condition: {weather.weather[0].description}</p>
+          <p>{weather.main.temp}°C</p>
+          <p className="description">{weather.weather[0].description}</p>
         </div>
       )}
-      
     </div>
   );
 }
