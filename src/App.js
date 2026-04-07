@@ -31,11 +31,24 @@ export default function App() {
   return (
     <div>
 
+      <h1>Weather App</h1>
+
       <input 
         type="text"
         placeholder="Enter a City..."
-        
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
       />
+
+      {error && <p>{error}</p>}
+
+      {weather && (
+        <div>
+          <h2>{weather.name}</h2>
+          <p>{weather.main.temp} Celsius</p>
+          <p>Condition: {weather.weather[0].description}</p>
+        </div>
+      )}
       
     </div>
   );
