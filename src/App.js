@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export default function App() {
 
@@ -39,6 +39,7 @@ export default function App() {
         value={city}
         onChange={(e) => setCity(e.target.value)}
       />
+      <button onClick={getWeather}>Get Weather</button>
 
       {error && <p>{error}</p>}
 
